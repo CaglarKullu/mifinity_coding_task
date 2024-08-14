@@ -57,7 +57,7 @@ class MovieListPage extends ConsumerWidget {
                         return ListTile(
                           title: Text(movie.title),
                           subtitle: Text(
-                              '${movie.voteAverage} - ${movie.releaseDate.day} - ${movie.genres}'),
+                              '${movie.voteAverage} - ${movie.releaseDate.day} - ${movie.genres.toString()}'),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete),
                             onPressed: () async {
