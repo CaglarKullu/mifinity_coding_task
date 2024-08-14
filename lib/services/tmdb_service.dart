@@ -1,15 +1,37 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
+import '../models/genre.dart';
 import '../models/movie.dart';
 
 class TMDbService {
   final String apiKey;
-  final String apiUrl = 'https://api.themoviedb.org/3/movie/popular';
+  final String apiUrl = 'https://api.themoviedb.org/3';
+  late Map<int, String> genreMap; // Map to store genre IDs and names
 
   TMDbService(this.apiKey);
 
+  // Fetch genres and populate the genre map
+  Future<void> fetchGenres() async {
+    final response =
+        await http.get(Uri.parse('$apiUrl/genre/movie/list?api_key=$apiKey'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List genres = data['genres'];
+
+      genreMap = {for (var genre in genres) genre['id']: genre['name']};
+    } else {
+      throw Exception('Failed to load genres');
+    }
+  }
+
   Future<List<Movie>> fetchPopularMovies() async {
-    final response = await http.get(Uri.parse('$apiUrl?api_key=$apiKey'));
+    // Ensure genres are fetched before fetching movies
+    await fetchGenres();
+
+    final response =
+        await http.get(Uri.parse('$apiUrl/movie/popular?api_key=$apiKey'));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -28,18 +50,19 @@ class TMDbService {
           ..backdropPath = movie['backdrop_path'] ?? ''
           ..originalLanguage = movie['original_language']
           ..adult = movie['adult']
-          ..status =
-              'Released' // Default value, not provided by the popular API
-          ..tagline = '' // Default value, not provided by the popular API
-          ..budget = 0 // Default value, not provided by the popular API
-          ..revenue = 0 // Default value, not provided by the popular API
-          ..runtime = 0 // Default value, not provided by the popular API
-          ..homepage = '' // Default value, not provided by the popular API
-          ..imdbId = '' // Default value, not provided by the popular API
+          ..status = 'Released'
+          ..tagline = ''
+          ..budget = 0
+          ..revenue = 0
+          ..runtime = 0
+          ..homepage = ''
+          ..imdbId = ''
           ..video = movie['video']
           ..popularity = movie['popularity'].toDouble()
           ..genres = (movie['genre_ids'] as List<dynamic>)
-              .map((genre) => genre.toString())
+              .map((genreId) => Genre()
+                ..id = genreId
+                ..name = genreMap[genreId] ?? 'Unknown')
               .toList();
       }).toList();
     } else {

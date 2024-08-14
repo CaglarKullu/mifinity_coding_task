@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import 'package:mifinity_coding_task/models/genre.dart';
 
 part 'movie.g.dart';
 
@@ -28,7 +29,7 @@ class Movie {
   late bool video;
   late double popularity;
 
-  List<String> genres = [];
+  List<Genre> genres = [];
   List<String> spokenLanguages = [];
   List<String> productionCompanies = [];
   List<String> productionCountries = [];
