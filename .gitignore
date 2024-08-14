@@ -9,6 +9,9 @@ build/
 # .env
 .env
 
+*.g.dart
+*.freezed.dart
+
 # Local configuration file (sdk path, etc)
 local.properties
 
