@@ -20,7 +20,6 @@ MovieModel _$MovieModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MovieModel {
-  String get title => throw _privateConstructorUsedError;
   String get year => throw _privateConstructorUsedError;
   String get rated => throw _privateConstructorUsedError;
   String get released => throw _privateConstructorUsedError;
@@ -57,8 +56,7 @@ abstract class $MovieModelCopyWith<$Res> {
       _$MovieModelCopyWithImpl<$Res, MovieModel>;
   @useResult
   $Res call(
-      {String title,
-      String year,
+      {String year,
       String rated,
       String released,
       String runtime,
@@ -95,7 +93,6 @@ class _$MovieModelCopyWithImpl<$Res, $Val extends MovieModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = null,
     Object? year = null,
     Object? rated = null,
     Object? released = null,
@@ -120,10 +117,6 @@ class _$MovieModelCopyWithImpl<$Res, $Val extends MovieModel>
     Object? website = null,
   }) {
     return _then(_value.copyWith(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
       year: null == year
           ? _value.year
           : year // ignore: cast_nullable_to_non_nullable
@@ -225,8 +218,7 @@ abstract class _$$MovieModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String title,
-      String year,
+      {String year,
       String rated,
       String released,
       String runtime,
@@ -261,7 +253,6 @@ class __$$MovieModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = null,
     Object? year = null,
     Object? rated = null,
     Object? released = null,
@@ -286,10 +277,6 @@ class __$$MovieModelImplCopyWithImpl<$Res>
     Object? website = null,
   }) {
     return _then(_$MovieModelImpl(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
       year: null == year
           ? _value.year
           : year // ignore: cast_nullable_to_non_nullable
@@ -386,8 +373,7 @@ class __$$MovieModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$MovieModelImpl implements _MovieModel {
   const _$MovieModelImpl(
-      {required this.title,
-      required this.year,
+      {required this.year,
       required this.rated,
       required this.released,
       required this.runtime,
@@ -413,8 +399,6 @@ class _$MovieModelImpl implements _MovieModel {
   factory _$MovieModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MovieModelImplFromJson(json);
 
-  @override
-  final String title;
   @override
   final String year;
   @override
@@ -462,7 +446,7 @@ class _$MovieModelImpl implements _MovieModel {
 
   @override
   String toString() {
-    return 'MovieModel(title: $title, year: $year, rated: $rated, released: $released, runtime: $runtime, genre: $genre, director: $director, writer: $writer, actors: $actors, plot: $plot, language: $language, country: $country, awards: $awards, poster: $poster, metascore: $metascore, imdbRating: $imdbRating, imdbVotes: $imdbVotes, imdbID: $imdbID, type: $type, dvd: $dvd, boxOffice: $boxOffice, production: $production, website: $website)';
+    return 'MovieModel(year: $year, rated: $rated, released: $released, runtime: $runtime, genre: $genre, director: $director, writer: $writer, actors: $actors, plot: $plot, language: $language, country: $country, awards: $awards, poster: $poster, metascore: $metascore, imdbRating: $imdbRating, imdbVotes: $imdbVotes, imdbID: $imdbID, type: $type, dvd: $dvd, boxOffice: $boxOffice, production: $production, website: $website)';
   }
 
   @override
@@ -470,7 +454,6 @@ class _$MovieModelImpl implements _MovieModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MovieModelImpl &&
-            (identical(other.title, title) || other.title == title) &&
             (identical(other.year, year) || other.year == year) &&
             (identical(other.rated, rated) || other.rated == rated) &&
             (identical(other.released, released) ||
@@ -507,7 +490,6 @@ class _$MovieModelImpl implements _MovieModel {
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
-        title,
         year,
         rated,
         released,
@@ -548,8 +530,7 @@ class _$MovieModelImpl implements _MovieModel {
 
 abstract class _MovieModel implements MovieModel {
   const factory _MovieModel(
-      {required final String title,
-      required final String year,
+      {required final String year,
       required final String rated,
       required final String released,
       required final String runtime,
@@ -575,8 +556,6 @@ abstract class _MovieModel implements MovieModel {
   factory _MovieModel.fromJson(Map<String, dynamic> json) =
       _$MovieModelImpl.fromJson;
 
-  @override
-  String get title;
   @override
   String get year;
   @override

@@ -8,7 +8,6 @@ part of 'movie_model.dart';
 
 _$MovieModelImpl _$$MovieModelImplFromJson(Map<String, dynamic> json) =>
     _$MovieModelImpl(
-      title: json['title'] as String,
       year: json['year'] as String,
       rated: json['rated'] as String,
       released: json['released'] as String,
@@ -35,7 +34,6 @@ _$MovieModelImpl _$$MovieModelImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$MovieModelImplToJson(_$MovieModelImpl instance) =>
     <String, dynamic>{
-      'title': instance.title,
       'year': instance.year,
       'rated': instance.rated,
       'released': instance.released,
