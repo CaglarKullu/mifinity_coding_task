@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'viewmodels/movie_viewmodel.dart';
-import 'viewmodels/movie_state.dart';
+import 'features/dashboard/state/movie_viewmodel.dart';
+import 'features/dashboard/state/movie_state.dart';
 
 void main() async {
   // Ensure WidgetsBinding is initialized

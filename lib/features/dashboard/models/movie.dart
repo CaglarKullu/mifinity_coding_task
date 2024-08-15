@@ -1,5 +1,5 @@
 import 'package:isar/isar.dart';
-import 'package:mifinity_coding_task/models/genre.dart';
+import 'package:mifinity_coding_task/features/dashboard/models/genre.dart';
 
 part 'movie.g.dart';
 

@@ -1,7 +1,7 @@
 import '../models/movie.dart';
-import '../utils/app_error.dart';
+import '../../../core/errors/app_error.dart';
 
-abstract class MovieState {}
+sealed class MovieState {}
 
 class MovieLoadingState extends MovieState {}
 

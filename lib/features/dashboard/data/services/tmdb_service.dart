@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/movie.dart';
-import '../models/genre.dart';
-import '../utils/app_error.dart';
+import '../../models/movie.dart';
+import '../../models/genre.dart';
+import '../../../../core/errors/app_error.dart';
 
 class TMDbService {
   final String apiKey;

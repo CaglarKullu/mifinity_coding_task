@@ -1,10 +1,10 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/movie.dart';
-import '../repositories/i_movie_repository.dart';
-import '../repositories/movie_repository.dart';
-import '../services/tmdb_service.dart';
-import '../utils/app_error.dart';
+import '../data/repositories/i_movie_repository.dart';
+import '../data/repositories/movie_repository.dart';
+import '../data/services/tmdb_service.dart';
+import '../../../core/errors/app_error.dart';
 import 'movie_state.dart';
 
 class MovieViewModel extends StateNotifier<MovieState> {

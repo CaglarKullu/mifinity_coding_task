@@ -1,4 +1,4 @@
-import '../models/movie.dart';
+import '../../models/movie.dart';
 
 abstract class MovieRepositoryInterface {
   Future<void> init();

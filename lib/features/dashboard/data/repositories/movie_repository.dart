@@ -1,7 +1,7 @@
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../models/movie.dart';
+import '../../models/movie.dart';
 import 'i_movie_repository.dart';
 
 class MovieRepository implements MovieRepositoryInterface {
