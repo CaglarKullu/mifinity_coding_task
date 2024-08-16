@@ -1,6 +1,7 @@
 // lib/app_router.dart
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mifinity_coding_task/features/main_screen.dart' as m;
 
 import 'app_router.gr.dart';
 
@@ -14,6 +15,6 @@ class AppRouter extends $AppRouter {
   RouteType get defaultRouteType => const RouteType.material();
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(page: DashboardView.page, initial: true),
+        AutoRoute(page: MainScreen.page, initial: true),
       ];
 }
