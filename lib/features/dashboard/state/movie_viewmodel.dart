@@ -26,9 +26,12 @@ class MovieViewModel extends StateNotifier<MovieState> {
     }
 
     try {
-      final existingMovies = await repository.getPopularMovies();
+      final existingMovies = await repository.getMovies();
       if (existingMovies.isEmpty) {
         await _populateMovies(tmdbService.fetchPopularMovies());
+        await _populateMovies(tmdbService.fetchTopRatedMovies());
+        await _populateMovies(tmdbService.fetchUpcomingMovies());
+        await _populateMovies(tmdbService.fetchNowPlayingMovies());
       } else {
         state = MovieLoadedState(existingMovies);
       }
@@ -97,6 +100,26 @@ class MovieViewModel extends StateNotifier<MovieState> {
       }
     }
     return posterLinks;
+  }
+
+  Future<List<Movie>> getTopRatedMovies() async {
+    final movies = await repository.getTopRatedMovies();
+    return movies;
+  }
+
+  Future<List<Movie>> getUpcomingMovies() async {
+    final movies = await repository.getUpcomingMovies();
+    return movies;
+  }
+
+  Future<List<Movie>> getNowPlayingMovies() async {
+    final movies = await repository.getNowPlayingMovies();
+    return movies;
+  }
+
+  Future<List<Movie>> getPopularMovies() async {
+    final movies = await repository.getPopularMovies();
+    return movies;
   }
 }
 

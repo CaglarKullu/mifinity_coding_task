@@ -14,15 +14,7 @@ class DashboardView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final movieState = ref.watch(movieViewModelProvider);
-
-    Future<List<String>> loadMoreMovies() async {
-      final moreMovies =
-          await ref.read(movieViewModelProvider.notifier).getMoreMovies();
-      return await ref
-          .read(movieViewModelProvider.notifier)
-          .getPosterLinks(moreMovies);
-    }
-
+    final movieViewModel = ref.watch(movieViewModelProvider.notifier);
     return Scaffold(
       appBar: const FakeflixAppBar(),
       body: Builder(
@@ -34,26 +26,38 @@ class DashboardView extends ConsumerWidget {
               final errorState = movieState as MovieErrorState;
               return Center(child: Text('Error: ${errorState.message}'));
             case const (MovieLoadedState):
-              final loadedState = movieState as MovieLoadedState;
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
                 primary: true,
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Popular Movies: ${loadedState.movies.length}',
+                      Text('Popular Movies',
                           style: Theme.of(context).textTheme.bodyMedium),
                       MovieList(
-                          initialMoviePosters: loadedState.movies
-                              .map((movie) => movie.posterPath)
-                              .toList(),
-                          loadMoreMovies: loadMoreMovies),
+                        loadMovies: movieViewModel.getTopRatedMovies,
+                      ),
+                      Text('Upcoming Movies',
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      MovieList(
+                        loadMovies: movieViewModel.getUpcomingMovies,
+                      ),
+                      Text('Now Playing Movies',
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      MovieList(
+                        loadMovies: movieViewModel.getNowPlayingMovies,
+                      ),
+                      Text('Top Rated Movies',
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      MovieList(
+                        loadMovies: movieViewModel.getPopularMovies,
+                      ),
                     ]),
               );
             case MovieEmptyState _:
               return const Center(child: Text('No movies found'));
             default:
-              return const SizedBox.shrink(); // Fallback for unhandled cases
+              return const SizedBox.shrink();
           }
         },
       ),
