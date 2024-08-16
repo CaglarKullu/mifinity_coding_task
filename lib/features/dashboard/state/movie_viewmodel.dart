@@ -26,9 +26,9 @@ class MovieViewModel extends StateNotifier<MovieState> {
     }
 
     try {
-      final existingMovies = await repository.getMovies();
+      final existingMovies = await repository.getPopularMovies();
       if (existingMovies.isEmpty) {
-        await _populateMovies();
+        await _populateMovies(tmdbService.fetchPopularMovies());
       } else {
         state = MovieLoadedState(existingMovies);
       }
@@ -38,9 +38,9 @@ class MovieViewModel extends StateNotifier<MovieState> {
     }
   }
 
-  Future<void> _populateMovies() async {
+  Future<void> _populateMovies(Future<List<Movie>> tmdbSercviceFuction) async {
     try {
-      final movies = await tmdbService.fetchPopularMovies();
+      final movies = await tmdbSercviceFuction;
       for (var movie in movies) {
         await repository.addMovie(movie);
       }
@@ -69,24 +69,34 @@ class MovieViewModel extends StateNotifier<MovieState> {
     }
   }
 
-  Future<void> addMovie(Movie movie) async {
+// get more movies
+
+  Future<List<Movie>> getMoreMovies() async {
     try {
-      await repository.addMovie(movie);
-      _loadMovies(); // Reload movies after adding a new one
+      final movies = await tmdbService.fetchPopularMovies();
+      return movies;
     } catch (e) {
-      state = MovieErrorState(DatabaseError(
-          "Failed to add movie to the database: ${e.toString()}"));
+      if (e is AppError) {
+        state = MovieErrorState(e); // Directly passing the AppError instance
+      } else {
+        state = MovieErrorState(
+            UnknownError("An unknown error occurred: ${e.toString()}"));
+      }
+      return [];
     }
   }
 
-  Future<void> deleteMovie(int id) async {
-    try {
-      await repository.deleteMovie(id);
-      _loadMovies(); // Reload movies after deletion
-    } catch (e) {
-      state = MovieErrorState(DatabaseError(
-          "Failed to delete movie from the database: ${e.toString()}"));
+  // get posters links
+
+  Future<List<String>> getPosterLinks(List<Movie> movies) async {
+    final posterLinks = <String>[];
+    for (var movie in movies) {
+      if (movie.posterPath != null) {
+        final posterUrl = 'https://image.tmdb.org/t/p/w500${movie.posterPath}';
+        posterLinks.add(posterUrl);
+      }
     }
+    return posterLinks;
   }
 }
 

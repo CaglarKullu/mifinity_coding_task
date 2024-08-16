@@ -1,9 +1,11 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mifinity_coding_task/features/dashboard/widgets/fakeflix_app_bar.dart';
 
 import '../state/movie_state.dart';
 import '../state/movie_viewmodel.dart';
+import '../widgets/movie_list.dart';
 
 @RoutePage()
 class DashboardView extends ConsumerWidget {
@@ -13,10 +15,16 @@ class DashboardView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final movieState = ref.watch(movieViewModelProvider);
 
+    Future<List<String>> loadMoreMovies() async {
+      final moreMovies =
+          await ref.read(movieViewModelProvider.notifier).getMoreMovies();
+      return await ref
+          .read(movieViewModelProvider.notifier)
+          .getPosterLinks(moreMovies);
+    }
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Movie List'),
-      ),
+      appBar: const FakeflixAppBar(),
       body: Builder(
         builder: (context) {
           switch (movieState.runtimeType) {
@@ -27,24 +35,20 @@ class DashboardView extends ConsumerWidget {
               return Center(child: Text('Error: ${errorState.message}'));
             case const (MovieLoadedState):
               final loadedState = movieState as MovieLoadedState;
-              return ListView.builder(
-                itemCount: loadedState.movies.length,
-                itemBuilder: (context, index) {
-                  final movie = loadedState.movies[index];
-                  return ListTile(
-                    title: Text(movie.title),
-                    subtitle: Text(
-                        'Director: ${movie.budget} - Release Year: ${movie.genres.toString()}'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () async {
-                        final viewModel =
-                            ref.read(movieViewModelProvider.notifier);
-                        await viewModel.deleteMovie(movie.id);
-                      },
-                    ),
-                  );
-                },
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                primary: true,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Popular Movies: ${loadedState.movies.length}',
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      MovieList(
+                          initialMoviePosters: loadedState.movies
+                              .map((movie) => movie.posterPath)
+                              .toList(),
+                          loadMoreMovies: loadMoreMovies),
+                    ]),
               );
             case MovieEmptyState _:
               return const Center(child: Text('No movies found'));

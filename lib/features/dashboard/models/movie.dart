@@ -28,6 +28,10 @@ class Movie {
   late String imdbId;
   late bool video;
   late double popularity;
+  late bool isPopularMovie;
+  late bool isNowPlayingMovie;
+  late bool isTopRatedMovie;
+  late bool isUpcomingMovie;
 
   List<Genre> genres = [];
   List<String> spokenLanguages = [];

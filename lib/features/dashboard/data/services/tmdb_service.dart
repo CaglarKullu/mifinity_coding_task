@@ -70,6 +70,203 @@ class TMDbService {
               ..imdbId = ''
               ..video = movie['video']
               ..popularity = movie['popularity'].toDouble()
+              ..isPopularMovie = true
+              ..isNowPlayingMovie = false
+              ..isTopRatedMovie = false
+              ..isUpcomingMovie = false
+              ..genres = (movie['genre_ids'] as List<dynamic>)
+                  .map((genreId) => Genre()
+                    ..id = genreId
+                    ..name = genreMap[genreId] ?? 'Unknown')
+                  .toList();
+          }).toList();
+        } catch (e) {
+          throw ParsingError(
+              'Parsing error occurred while processing movies: ${e.toString()}');
+        }
+      } else {
+        throw ApiError('Failed to load popular movies from the API');
+      }
+    } catch (e) {
+      if (e is http.ClientException) {
+        throw NetworkError(
+            'Network error occurred while fetching movies: ${e.message}');
+      } else if (e is ParsingError) {
+        rethrow; // Re-throw the parsing error to be handled by the caller
+      } else {
+        throw ApiError(
+            'API error occurred while fetching movies: ${e.toString()}');
+      }
+    }
+  }
+
+  // get top rated movies
+  Future<List<Movie>> fetchTopRatedMovies() async {
+    await fetchGenres(); // Ensure genres are fetched before fetching movies
+
+    try {
+      final response =
+          await http.get(Uri.parse('$apiUrl/movie/top_rated?api_key=$apiKey'));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final List movies = data['results'];
+
+        try {
+          return movies.map((movie) {
+            return Movie()
+              ..tmdbId = movie['id']
+              ..title = movie['title']
+              ..originalTitle = movie['original_title']
+              ..overview = movie['overview']
+              ..releaseDate = DateTime.parse(movie['release_date'])
+              ..voteAverage = movie['vote_average'].toDouble()
+              ..voteCount = movie['vote_count']
+              ..posterPath = movie['poster_path'] ?? ''
+              ..backdropPath = movie['backdrop_path'] ?? ''
+              ..originalLanguage = movie['original_language']
+              ..adult = movie['adult']
+              ..status = 'Released'
+              ..tagline = ''
+              ..budget = 0
+              ..revenue = 0
+              ..runtime = 0
+              ..homepage = ''
+              ..imdbId = ''
+              ..video = movie['video']
+              ..popularity = movie['popularity'].toDouble()
+              ..isNowPlayingMovie = false
+              ..isPopularMovie = false
+              ..isTopRatedMovie = true
+              ..isUpcomingMovie = false
+              ..genres = (movie['genre_ids'] as List<dynamic>)
+                  .map((genreId) => Genre()
+                    ..id = genreId
+                    ..name = genreMap[genreId] ?? 'Unknown')
+                  .toList();
+          }).toList();
+        } catch (e) {
+          throw ParsingError(
+              'Parsing error occurred while processing movies: ${e.toString()}');
+        }
+      } else {
+        throw ApiError('Failed to load popular movies from the API');
+      }
+    } catch (e) {
+      if (e is http.ClientException) {
+        throw NetworkError(
+            'Network error occurred while fetching movies: ${e.message}');
+      } else if (e is ParsingError) {
+        rethrow; // Re-throw the parsing error to be handled by the caller
+      } else {
+        throw ApiError(
+            'API error occurred while fetching movies: ${e.toString()}');
+      }
+    }
+  }
+
+  // get upcoming movies
+  Future<List<Movie>> fetchUpcomingMovies() async {
+    await fetchGenres(); // Ensure genres are fetched before fetching movies
+    try {
+      final response =
+          await http.get(Uri.parse('$apiUrl/movie/upcoming?api_key=$apiKey'));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final List movies = data['results'];
+
+        try {
+          return movies.map((movie) {
+            return Movie()
+              ..tmdbId = movie['id']
+              ..title = movie['title']
+              ..originalTitle = movie['original_title']
+              ..overview = movie['overview']
+              ..releaseDate = DateTime.parse(movie['release_date'])
+              ..voteAverage = movie['vote_average'].toDouble()
+              ..voteCount = movie['vote_count']
+              ..posterPath = movie['poster_path'] ?? ''
+              ..backdropPath = movie['backdrop_path'] ?? ''
+              ..originalLanguage = movie['original_language']
+              ..adult = movie['adult']
+              ..status = 'Released'
+              ..tagline = ''
+              ..budget = 0
+              ..revenue = 0
+              ..runtime = 0
+              ..homepage = ''
+              ..imdbId = ''
+              ..video = movie['video']
+              ..popularity = movie['popularity'].toDouble()
+              ..isUpcomingMovie = true
+              ..isNowPlayingMovie = false
+              ..isTopRatedMovie = false
+              ..isPopularMovie = false
+              ..genres = (movie['genre_ids'] as List<dynamic>)
+                  .map((genreId) => Genre()
+                    ..id = genreId
+                    ..name = genreMap[genreId] ?? 'Unknown')
+                  .toList();
+          }).toList();
+        } catch (e) {
+          throw ParsingError(
+              'Parsing error occurred while processing movies: ${e.toString()}');
+        }
+      } else {
+        throw ApiError('Failed to load popular movies from the API');
+      }
+    } catch (e) {
+      if (e is http.ClientException) {
+        throw NetworkError(
+            'Network error occurred while fetching movies: ${e.message}');
+      } else if (e is ParsingError) {
+        rethrow; // Re-throw the parsing error to be handled by the caller
+      } else {
+        throw ApiError(
+            'API error occurred while fetching movies: ${e.toString()}');
+      }
+    }
+  }
+  // now playing movies
+
+  Future<List<Movie>> fetchNowPlayingMovies() async {
+    await fetchGenres(); // Ensure genres are fetched before fetching movies
+    try {
+      final response = await http
+          .get(Uri.parse('$apiUrl/movie/now_playing?api_key=$apiKey'));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final List movies = data['results'];
+
+        try {
+          return movies.map((movie) {
+            return Movie()
+              ..tmdbId = movie['id']
+              ..title = movie['title']
+              ..originalTitle = movie['original_title']
+              ..overview = movie['overview']
+              ..releaseDate = DateTime.parse(movie['release_date'])
+              ..voteAverage = movie['vote_average'].toDouble()
+              ..voteCount = movie['vote_count']
+              ..posterPath = movie['poster_path'] ?? ''
+              ..backdropPath = movie['backdrop_path'] ?? ''
+              ..originalLanguage = movie['original_language']
+              ..adult = movie['adult']
+              ..status = 'Released'
+              ..tagline = ''
+              ..budget = 0
+              ..revenue = 0
+              ..runtime = 0
+              ..homepage = ''
+              ..imdbId = ''
+              ..video = movie['video']
+              ..popularity = movie['popularity'].toDouble()
+              ..isNowPlayingMovie = true
+              ..isPopularMovie = false
+              ..isTopRatedMovie = false
+              ..isUpcomingMovie = false
               ..genres = (movie['genre_ids'] as List<dynamic>)
                   .map((genreId) => Genre()
                     ..id = genreId
