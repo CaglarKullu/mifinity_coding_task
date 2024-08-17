@@ -7,7 +7,7 @@ class User {
   Id id = Isar.autoIncrement;
 
   late String email;
-  late String password;
+  String? password;
   late String passwordHash;
   late String salt;
 
