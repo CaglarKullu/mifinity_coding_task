@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/movie_search_delegate.dart';
 
-class SearchScreen extends StatelessWidget {
-  final List<String> allMovies = [
-    'https://image.tmdb.org/t/p/w500/movie1.jpg',
-    'https://image.tmdb.org/t/p/w500/movie2.jpg',
-    'https://image.tmdb.org/t/p/w500/movie3.jpg',
-    'https://image.tmdb.org/t/p/w500/movie4.jpg',
-    // Add more movie URLs as needed
-  ];
-
-  SearchScreen({super.key});
+class SearchScreen extends ConsumerWidget {
+  const SearchScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search'),
@@ -24,7 +17,7 @@ class SearchScreen extends StatelessWidget {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: MovieSearchDelegate(allMovies: allMovies, context),
+                delegate: MovieSearchDelegate(ref: ref),
               );
             },
           ),

@@ -7,6 +7,7 @@ import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/auth/models/user.dart';
 import '../../features/dashboard/data/repositories/movie_repository.dart';
 import '../../features/dashboard/models/movie.dart';
+import '../../features/search/data/repository/search_repository.dart';
 
 final routerProvider = Provider<AppRouter>(AppRouter.new);
 
@@ -26,4 +27,15 @@ final authRepositoryProvider = FutureProvider<AuthRepository>((ref) async {
 final movieRepositoryProvider = FutureProvider<MovieRepository>((ref) async {
   final isar = await ref.watch(isarProvider.future);
   return MovieRepository(isar);
+});
+
+final searchRepositoryProvider = Provider<SearchRepository>((ref) {
+  final isar = ref.watch(isarProvider).maybeWhen(
+        data: (isar) => isar,
+        orElse: () => null,
+      );
+  if (isar == null) {
+    throw Exception('Isar database is not initialized');
+  }
+  return SearchRepository(isar);
 });

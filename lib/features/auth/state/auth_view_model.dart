@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/errors/app_error.dart';
 import '../../../core/global_providers/global_providers.dart';
 import '../data/repositories/auth_repository.dart';
 import '../data/services/auth_service.dart';
@@ -19,9 +20,11 @@ class AuthViewModel extends StateNotifier<AuthState> {
     try {
       await authRepository.init();
     } catch (e) {
+      log('Database initialization failed: $e');
       state = AuthState(
         status: AuthStateStatus.error,
-        errorMessage: 'Failed to initialize the database: $e',
+        errorMessage:
+            DatabaseError('Failed to initialize the database: $e').toString(),
       );
     }
   }
@@ -38,13 +41,14 @@ class AuthViewModel extends StateNotifier<AuthState> {
       } else {
         state = AuthState(
           status: AuthStateStatus.error,
-          errorMessage: error,
+          errorMessage: ApiError(error).toString(),
         );
       }
     } catch (e) {
+      log('Registration error: $e');
       state = AuthState(
         status: AuthStateStatus.error,
-        errorMessage: 'Registration error: ${e.toString()}',
+        errorMessage: _handleError(e).toString(),
       );
     }
   }
@@ -78,9 +82,10 @@ class AuthViewModel extends StateNotifier<AuthState> {
         );
       }
     } catch (e) {
+      log('Login error: $e');
       state = AuthState(
         status: AuthStateStatus.error,
-        errorMessage: 'Login error: ${e.toString()}',
+        errorMessage: _handleError(e).toString(),
       );
     }
   }
@@ -90,10 +95,25 @@ class AuthViewModel extends StateNotifier<AuthState> {
       await authService.logout();
       state = AuthState(status: AuthStateStatus.unauthenticated);
     } catch (e) {
+      log('Logout error: $e');
       state = AuthState(
         status: AuthStateStatus.error,
-        errorMessage: 'Logout error: ${e.toString()}',
+        errorMessage: _handleError(e).toString(),
       );
+    }
+  }
+
+  AppError _handleError(dynamic error) {
+    if (error is NetworkError) {
+      return NetworkError(error.message);
+    } else if (error is ApiError) {
+      return ApiError(error.message);
+    } else if (error is DatabaseError) {
+      return DatabaseError(error.message);
+    } else if (error is ParsingError) {
+      return ParsingError(error.message);
+    } else {
+      return UnknownError('An unknown error occurred: $error');
     }
   }
 }

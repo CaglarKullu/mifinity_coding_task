@@ -59,7 +59,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           );
         } else if (authState.status == AuthStateStatus.authenticated) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Authentication successful!')),
+            const SnackBar(content: Text('Login successful!')),
           );
           // Navigate to the main screen
           AutoRouter.of(context).replace(const MainRoute());
@@ -71,6 +71,15 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final authRepositoryState = ref.watch(authRepositoryProvider);
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    double formWidth = screenWidth * 0.9;
+    if (screenWidth > 600) {
+      formWidth = screenWidth * 0.8;
+    }
+    if (screenWidth > 1000) {
+      formWidth = screenWidth * 0.6;
+    }
 
     return authRepositoryState.when(
       data: (authRepository) {
@@ -78,102 +87,114 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
         return Scaffold(
           backgroundColor: Colors.black,
-          body: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      'Fakeflix',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 40),
-                    TextFormField(
-                      controller: _emailController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        labelStyle: const TextStyle(color: Colors.white),
-                        filled: true,
-                        fillColor: Colors.grey[800],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
+          resizeToAvoidBottomInset:
+              true, // Allow resizing when the keyboard appears
+          body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context)
+                  .unfocus(); // Dismiss the keyboard when tapping outside
+            },
+            child: Center(
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: SizedBox(
+                    width: formWidth,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          'Fakeflix',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        prefixIcon:
-                            const Icon(Icons.email, color: Colors.white),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) => Validation.validateEmail(
-                          value!), // Use the validation utility
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _passwordController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        labelStyle: const TextStyle(color: Colors.white),
-                        filled: true,
-                        fillColor: Colors.grey[800],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
-                        ),
-                        prefixIcon: const Icon(Icons.lock, color: Colors.white),
-                      ),
-                      obscureText: true,
-                      validator: (value) => Validation.validatePassword(value!),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _submit,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                      child: authState.status == AuthStateStatus.loading
-                          ? const CircularProgressIndicator.adaptive()
-                          : Text(
-                              _isLogin ? 'Login' : 'Register',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(color: Colors.white),
+                        const SizedBox(height: 40),
+                        TextFormField(
+                          controller: _emailController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            labelStyle: const TextStyle(color: Colors.white),
+                            filled: true,
+                            fillColor: Colors.grey[800],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide.none,
                             ),
-                    ),
-                    TextButton(
-                      onPressed: _toggleFormMode,
-                      child: Text(
-                        _isLogin
-                            ? 'Don\'t have an account? Register'
-                            : 'Already have an account? Login',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    if (_isLogin)
-                      TextButton(
-                        onPressed: () {
-                          // Implement Forgot Password functionality here
-                        },
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(color: Colors.grey),
+                            prefixIcon:
+                                const Icon(Icons.email, color: Colors.white),
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) => Validation.validateEmail(
+                              value!), // Use the validation utility
                         ),
-                      ),
-                  ],
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          controller: _passwordController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            labelStyle: const TextStyle(color: Colors.white),
+                            filled: true,
+                            fillColor: Colors.grey[800],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide.none,
+                            ),
+                            prefixIcon:
+                                const Icon(Icons.lock, color: Colors.white),
+                          ),
+                          obscureText: true,
+                          validator: (value) =>
+                              Validation.validatePassword(value!),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: _submit,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          child: authState.status == AuthStateStatus.loading
+                              ? const CircularProgressIndicator.adaptive()
+                              : Text(
+                                  _isLogin ? 'Login' : 'Register',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(color: Colors.white),
+                                ),
+                        ),
+                        TextButton(
+                          onPressed: _toggleFormMode,
+                          child: Text(
+                            _isLogin
+                                ? 'Don\'t have an account? Register'
+                                : 'Already have an account? Login',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        if (_isLogin)
+                          TextButton(
+                            onPressed: () {
+                              // Implement Forgot Password functionality here
+                            },
+                            child: const Text(
+                              'Forgot Password?',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
