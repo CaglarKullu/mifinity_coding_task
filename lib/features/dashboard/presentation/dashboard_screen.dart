@@ -5,8 +5,8 @@ import '../state/movie_state.dart';
 import '../state/movie_viewmodel.dart';
 import '../widgets/categories_list.dart';
 
-class DashboardView extends ConsumerWidget {
-  const DashboardView({super.key});
+class DashboardScreen extends ConsumerWidget {
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

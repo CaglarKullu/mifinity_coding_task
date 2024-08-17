@@ -2,9 +2,12 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mifinity_coding_task/features/dashboard/widgets/fakeflix_app_bar.dart';
+import 'package:mifinity_coding_task/features/profile/presentation/profile.dart';
+import 'package:mifinity_coding_task/features/search/presentation/search_screen.dart';
 
 import '../core/global_providers/global_providers.dart';
-import 'dashboard/presentation/dashboard_view.dart';
+import '../core/utils/utils.dart';
+import 'dashboard/presentation/dashboard_screen.dart';
 
 @RoutePage()
 class MainScreen extends ConsumerWidget {
@@ -18,19 +21,24 @@ class MainScreen extends ConsumerWidget {
       appBar: const FakeflixAppBar(),
       body: IndexedStack(
         index: selectedIndex,
-        children: const [
-          Center(
-            child: DashboardView(),
+        children: [
+          const Center(
+            child: DashboardScreen(),
           ),
-          Center(child: Text('Search')),
-          Center(child: Text('Download')),
-          Center(child: Text('Profile')),
+          Center(child: SearchScreen()),
+          const Placeholder(),
+          const Center(child: ProfileScreen()),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
-          onTap: (index) =>
-              ref.read(bottomNavIndexProvider.notifier).state = index,
+          onTap: (index) {
+            if (index == 2) {
+              showFeatureUnavailableDialog(context, 'Download');
+            } else {
+              ref.read(bottomNavIndexProvider.notifier).state = index;
+            }
+          },
           items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.movie), label: 'Movie List'),

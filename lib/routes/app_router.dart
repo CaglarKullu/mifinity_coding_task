@@ -1,20 +1,20 @@
 // lib/app_router.dart
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mifinity_coding_task/features/main_screen.dart' as m;
 
-import 'app_router.gr.dart';
+import 'app_router.gr.dart' as router;
 
 @AutoRouterConfig(
-  replaceInRouteName: 'Page,Route',
+  replaceInRouteName: 'Screen,Route',
 )
-class AppRouter extends $AppRouter {
+class AppRouter extends router.$AppRouter {
   final Ref ref;
   AppRouter(this.ref);
   @override
   RouteType get defaultRouteType => const RouteType.material();
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(page: MainScreen.page, initial: true),
+        AutoRoute(page: router.AuthRoute.page, initial: true),
+        AutoRoute(page: router.MainRoute.page),
       ];
 }
