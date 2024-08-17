@@ -42,8 +42,7 @@ This project is a Flutter-based mobile application developed as part of a coding
     String toString() {
     return 'User{id: $id, email: $email}';
   }
-}
-  ```
+} ```
 
   ## **Dashboard**:
   - **Models**: Represents movies and genres (`movie.dart`, `genre.dart`).
