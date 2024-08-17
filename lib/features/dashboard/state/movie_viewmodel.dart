@@ -94,10 +94,8 @@ class MovieViewModel extends StateNotifier<MovieState> {
   Future<List<String>> getPosterLinks(List<Movie> movies) async {
     final posterLinks = <String>[];
     for (var movie in movies) {
-      if (movie.posterPath != null) {
-        final posterUrl = 'https://image.tmdb.org/t/p/w500${movie.posterPath}';
-        posterLinks.add(posterUrl);
-      }
+      final posterUrl = 'https://image.tmdb.org/t/p/w500${movie.posterPath}';
+      posterLinks.add(posterUrl);
     }
     return posterLinks;
   }
