@@ -10,7 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load the environment variables from the .env file
-  await dotenv.load(fileName: ".env"); // Load the .env file
+  await dotenv.load(fileName: ".env");
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -25,6 +25,7 @@ class MyApp extends ConsumerWidget {
       title: 'FakeFlix',
       theme: FakeflixTheme.darkTheme,
       routerConfig: router.config(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
