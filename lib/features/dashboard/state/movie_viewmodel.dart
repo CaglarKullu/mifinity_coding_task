@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/global_providers/global_providers.dart';
 import '../models/movie.dart';
 import '../data/repositories/i_movie_repository.dart';
 import '../data/repositories/movie_repository.dart';
@@ -123,13 +124,16 @@ class MovieViewModel extends StateNotifier<MovieState> {
 
 //Providers
 
-final movieRepositoryProvider = Provider<MovieRepository>((ref) {
-  return MovieRepository();
-});
-
 final movieViewModelProvider =
     StateNotifierProvider<MovieViewModel, MovieState>((ref) {
-  final repository = ref.watch(movieRepositoryProvider);
+  final repository = ref.watch(movieRepositoryProvider).maybeWhen(
+        data: (repo) => repo,
+        orElse: () => null,
+      );
+
+  if (repository == null) {
+    throw Exception('MovieRepository not available');
+  }
   final tmdbService = TMDbService(dotenv.env['TMDB_API_KEY']!);
   return MovieViewModel(repository, tmdbService);
 });

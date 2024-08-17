@@ -18,10 +18,11 @@ class DashboardScreen extends ConsumerWidget {
             return const Center(child: CircularProgressIndicator());
           case const (MovieErrorState):
             final errorState = movieState as MovieErrorState;
-            return Center(child: Text('Error: ${errorState.message}'));
+            return Center(
+                child: Text('Error: ${errorState.message.toString()}'));
           case const (MovieLoadedState):
             return const CategoriesList();
-          case MovieEmptyState _:
+          case const (MovieEmptyState):
             return const Center(child: Text('No movies found'));
           default:
             return const SizedBox.shrink();

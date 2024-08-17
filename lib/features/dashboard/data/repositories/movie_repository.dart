@@ -6,31 +6,27 @@ import '../../models/movie.dart';
 import 'i_movie_repository.dart';
 
 class MovieRepository implements MovieRepositoryInterface {
-  Isar? _isar;
+  final Isar _isar;
 
+  MovieRepository(this._isar);
   @override
-  Future<void> init() async {
-    if (_isar == null) {
-      final dir = await getApplicationDocumentsDirectory();
-      _isar = await Isar.open([MovieSchema], directory: dir.path);
-    }
-  }
+  Future<void> init() async {}
 
   @override
   Future<void> addMovie(Movie movie) async {
-    await _isar!.writeTxn(() async {
-      await _isar!.movies.put(movie);
+    await _isar.writeTxn(() async {
+      await _isar.movies.put(movie);
     });
   }
 
   @override
   Future<List<Movie>> getMovies() async {
-    return await _isar!.movies.where().findAll();
+    return await _isar.movies.where().findAll();
   }
 
   @override
   Future<List<Movie>> searchByGenre(String genreName) async {
-    return await _isar!.movies
+    return await _isar.movies
         .filter()
         .genresElement((q) => q.nameContains(genreName))
         .findAll();
@@ -38,14 +34,14 @@ class MovieRepository implements MovieRepositoryInterface {
 
   @override
   Future<void> deleteMovie(int id) async {
-    await _isar!.writeTxn(() async {
-      await _isar!.movies.delete(id);
+    await _isar.writeTxn(() async {
+      await _isar.movies.delete(id);
     });
   }
 
   @override
   Future<List<Movie>> generalSearch(String query) async {
-    return await _isar!.movies
+    return await _isar.movies
         .filter()
         .titleContains(query)
         .or()
@@ -57,21 +53,21 @@ class MovieRepository implements MovieRepositoryInterface {
 
   @override
   Future<List<Movie>> getNowPlayingMovies() {
-    return _isar!.movies.filter().isNowPlayingMovieEqualTo(true).findAll();
+    return _isar.movies.filter().isNowPlayingMovieEqualTo(true).findAll();
   }
 
   @override
   Future<List<Movie>> getPopularMovies() {
-    return _isar!.movies.filter().isPopularMovieEqualTo(true).findAll();
+    return _isar.movies.filter().isPopularMovieEqualTo(true).findAll();
   }
 
   @override
   Future<List<Movie>> getTopRatedMovies() {
-    return _isar!.movies.filter().isTopRatedMovieEqualTo(true).findAll();
+    return _isar.movies.filter().isTopRatedMovieEqualTo(true).findAll();
   }
 
   @override
   Future<List<Movie>> getUpcomingMovies() {
-    return _isar!.movies.filter().isUpcomingMovieEqualTo(true).findAll();
+    return _isar.movies.filter().isUpcomingMovieEqualTo(true).findAll();
   }
 }
