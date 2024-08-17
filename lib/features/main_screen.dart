@@ -16,37 +16,49 @@ class MainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(bottomNavIndexProvider);
-    return SafeArea(
-        child: Scaffold(
-      appBar: const FakeflixAppBar(),
-      body: IndexedStack(
-        index: selectedIndex,
-        children: [
-          const Center(
-            child: DashboardScreen(),
+    final movieRepositoryState = ref.watch(movieRepositoryProvider);
+    return movieRepositoryState.when(
+      data: (movieRepository) {
+        return Scaffold(
+          appBar: const FakeflixAppBar(),
+          body: IndexedStack(
+            index: selectedIndex,
+            children: [
+              const Center(
+                child: DashboardScreen(),
+              ),
+              Center(child: SearchScreen()),
+              const Placeholder(),
+              const Center(child: ProfileScreen()),
+            ],
           ),
-          Center(child: SearchScreen()),
-          const Placeholder(),
-          const Center(child: ProfileScreen()),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndex,
-          onTap: (index) {
-            if (index == 2) {
-              showFeatureUnavailableDialog(context, 'Download');
-            } else {
-              ref.read(bottomNavIndexProvider.notifier).state = index;
-            }
-          },
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.movie), label: 'Movie List'),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.download), label: 'Download'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ]),
-    ));
+          bottomNavigationBar: BottomNavigationBar(
+              currentIndex: selectedIndex,
+              onTap: (index) {
+                if (index == 2) {
+                  showFeatureUnavailableDialog(context, 'Download');
+                } else {
+                  ref.read(bottomNavIndexProvider.notifier).state = index;
+                }
+              },
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.movie), label: 'Movie List'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.search), label: 'Search'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.download), label: 'Download'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person), label: 'Profile'),
+              ]),
+        );
+      },
+      error: (error, stackTrace) {
+        return Center(child: Text(error.toString()));
+      },
+      loading: () {
+        return const Center(child: CircularProgressIndicator.adaptive());
+      },
+    );
   }
 }
