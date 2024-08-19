@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/global_providers/global_providers.dart';
 import '../models/movie.dart';
 import '../data/repositories/i_movie_repository.dart';
-import '../data/repositories/movie_repository.dart';
 import '../data/services/tmdb_service.dart';
 import '../../../core/errors/app_error.dart';
 import 'movie_state.dart';

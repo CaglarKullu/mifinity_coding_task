@@ -23,13 +23,13 @@ class MainScreen extends ConsumerWidget {
           appBar: const FakeflixAppBar(),
           body: IndexedStack(
             index: selectedIndex,
-            children: [
-              const Center(
+            children: const [
+              Center(
                 child: DashboardScreen(),
               ),
               Center(child: SearchScreen()),
-              const Placeholder(),
-              const Center(child: ProfileScreen()),
+              Placeholder(),
+              Center(child: ProfileScreen()),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(

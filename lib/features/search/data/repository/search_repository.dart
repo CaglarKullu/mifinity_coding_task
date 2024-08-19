@@ -27,6 +27,8 @@ class SearchRepository implements SearchRepositoryInterface {
         .originalTitleContains(query, caseSensitive: false)
         .or()
         .overviewContains(query, caseSensitive: false)
+        .or()
+        .genresElement((q) => q.nameContains(query, caseSensitive: false))
         .findAll();
 
     results.sort((a, b) {

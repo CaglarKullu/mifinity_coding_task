@@ -11,26 +11,12 @@ class AuthRepository implements AuthRepositoryInterface {
   AuthRepository(this._isar);
 
   @override
-  Future<void> init() async {
-    if (_isar == null) {
-      try {
-        final dir = await getApplicationDocumentsDirectory();
-        _isar = await Isar.open([UserSchema], directory: dir.path);
-        log('Isar initialized successfully');
-      } catch (e) {
-        log('Failed to initialize Isar: $e');
-        rethrow;
-      }
-    }
-  }
+  Future<void> init() async {}
 
   @override
   Future<User?> getUserByEmail(String email) async {
     try {
-      if (_isar == null) {
-        await init();
-      }
-      final user = await _isar!.users.filter().emailEqualTo(email).findFirst();
+      final user = await _isar.users.filter().emailEqualTo(email).findFirst();
       log(user != null
           ? 'User found: ${user.email}'
           : 'No user found for email: $email');
@@ -44,11 +30,8 @@ class AuthRepository implements AuthRepositoryInterface {
   @override
   Future<void> registerUser(User user) async {
     try {
-      if (_isar == null) {
-        await init(); // Ensure Isar is initialized before use
-      }
-      await _isar!.writeTxn(() async {
-        await _isar!.users.put(user);
+      await _isar.writeTxn(() async {
+        await _isar.users.put(user);
       });
       log('User registered: ${user.email}');
     } catch (e) {
@@ -60,10 +43,7 @@ class AuthRepository implements AuthRepositoryInterface {
   @override
   Future<User?> loginUser(String email, String password) async {
     try {
-      if (_isar == null) {
-        await init(); // Ensure Isar is initialized before use
-      }
-      final user = await _isar!.users
+      final user = await _isar.users
           .filter()
           .emailEqualTo(email)
           .and()

@@ -1,5 +1,3 @@
-import 'package:mifinity_coding_task/features/dashboard/models/genre.dart';
-
 import '../../../dashboard/models/movie.dart';
 
 abstract class SearchRepositoryInterface {
