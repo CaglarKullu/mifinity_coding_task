@@ -42,10 +42,9 @@ This project is a Flutter-based mobile application developed as part of a coding
     String toString() {
     return 'User{id: $id, email: $email}';
   }
-}
-  ```
+} ```
 
-- **Dashboard**:
+  ## **Dashboard**:
   - **Models**: Represents movies and genres (`movie.dart`, `genre.dart`).
   - **Repositories**: Handles data retrieval from services like TMDB (`movie_repository.dart`, `tmdb_service.dart`).
   - **State Management**: Manages the state of movies displayed on the dashboard (`movie_viewmodel.dart`, `movie_state.dart`).
